@@ -7,7 +7,7 @@ function TodoItem({ todo }) {
   const { updateTodo, deleteTodo, toggleComplete } = useTodo();
 
   const editTodo = async () => {
-    updateTodo(todo.id, { ...todo, todo: todoMsg });
+    updateTodo(todo.id, { ...todo, name: todoMsg });
     setIsTodoEditable(false);
   };
   const toggleCompleted = () => {

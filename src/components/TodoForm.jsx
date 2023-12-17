@@ -11,7 +11,7 @@ function TodoForm({ user }) {
     if (!todo) return;
     try {
       await pushTodo({ todo });
-      addTodo({ todo: todo, isCompleted: false });
+      // addTodo({ todo: todo, isCompleted: false });
       setTodo("");
     } catch (error) {
       console.log(error);
@@ -19,10 +19,15 @@ function TodoForm({ user }) {
   };
 
   async function pushTodo({ todo }) {
-    const { data, error, status } = await supabase.from("todos").insert({
-      name: todo,
-      user_id: user.id,
-    });
+    const { data, error, status } = await supabase
+      .from("todos")
+      .insert({
+        name: todo,
+        user_id: user.id,
+      })
+      .select("*");
+    setTodo(data);
+
     console.log(`Data: ${data}, error: ${error}, Status: ${status}`);
   }
 

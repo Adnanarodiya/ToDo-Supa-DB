@@ -29,10 +29,17 @@ function App() {
     ]);
   };
 
-  const updateTodo = (id, todo) => {
+  const updateTodo = async (id, todo) => {
     setTodos((prevTodos) =>
       prevTodos.map((checkTodo) => (checkTodo.id === id ? todo : checkTodo))
     );
+
+    const { error } = await supabase
+      .from("todos")
+      .update({ name: todo.name })
+      .eq("user_id", user.id)
+      .eq("id", id);
+    console.log(error);
   };
 
   const deleteTodo = async (id) => {
@@ -77,7 +84,7 @@ function App() {
         setTodos(data.data);
         // setTodos(data);
       });
-  }, [user]);
+  }, [user, todos]);
 
   // Storing TODO in LocalStorage
   // useEffect(() => {
@@ -119,18 +126,7 @@ function App() {
       value={{ todos, addTodo, updateTodo, deleteTodo, toggleComplete }}
     >
       {/* Open the modal using document.getElementById('ID').showModal() method */}
-      <button
-        className="btn"
-        onClick={() => {
-          if (user) {
-            logout();
-          } else {
-            document.getElementById("my_modal_2").showModal();
-          }
-        }}
-      >
-        {user ? "Logout" : "Login"}
-      </button>
+
       <dialog id="my_modal_2" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg text-center mb-8 ">
@@ -183,19 +179,32 @@ function App() {
       </dialog>
 
       <div className="bg-[#172842] min-h-screen py-8">
-        <div>
+        <div className="flex justify-center mb-8">
+          <button
+            className="bg-green-600 hover:bg-green-600/90 text-black btn"
+            onClick={() => {
+              if (user) {
+                logout();
+              } else {
+                document.getElementById("my_modal_2").showModal();
+              }
+            }}
+          >
+            {user ? "Logout - 😒" : "Login - 😊"}
+          </button>
+        </div>
+
+        {/* <div>
           <button
             onClick={user ? logout : login}
             className="p-4 bg-white text-black"
           >
             {user ? "Logout" : "Login"}
           </button>
-        </div>
-
+        </div> */}
         {/* <pre>
           <code>{JSON.stringify(user, null, 2)}</code>
         </pre> */}
-
         <div className="w-full max-w-2xl mx-auto shadow-md rounded-lg px-4 py-3 text-white">
           <h1 className="text-2xl font-bold text-center mb-8 mt-2">
             {user && <span>Welcome {user.user_metadata.name}, </span>}
