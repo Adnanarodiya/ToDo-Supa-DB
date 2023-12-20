@@ -4,7 +4,7 @@ import { TodoProvider } from "./contexts/TodoContext";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
 import { supabase } from "./lib/helper/supabaseClient";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { z } from "zod";
 
 function App() {
